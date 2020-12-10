@@ -56,8 +56,11 @@ const showCountryGraph = (countryName) => {
   };
 
   const countryChart = document.createElement('div');
+  const chartLineTitle = document.createElement('h2');
+  chartLineTitle.innerText = `Daily cases in ${countryName}`
   countryChart.classList.add(`${countryName}-chart`);
   countryChart.classList.add(`ct-golden-section`);
+  chartsCountryDiv.appendChild(chartLineTitle);
   chartsCountryDiv.appendChild(countryChart);
 
   new Chartist.Line(countryChart, countryData);
