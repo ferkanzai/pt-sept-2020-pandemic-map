@@ -794,7 +794,7 @@ const covidData = [
   {
     date: '01/12/2020',
     dailyCases: '3575',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '542.49845068',
@@ -802,7 +802,7 @@ const covidData = [
   {
     date: '01/11/2020',
     dailyCases: '11429',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '1561.29692576',
@@ -810,7 +810,7 @@ const covidData = [
   {
     date: '01/10/2020',
     dailyCases: '1076',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '261.85468272',
@@ -818,7 +818,7 @@ const covidData = [
   {
     date: '01/09/2020',
     dailyCases: '251',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '41.46556743',
@@ -826,7 +826,7 @@ const covidData = [
   {
     date: '01/08/2020',
     dailyCases: '232',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '26.59204868',
@@ -834,7 +834,7 @@ const covidData = [
   {
     date: '01/07/2020',
     dailyCases: '149',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '17.3054893',
@@ -842,7 +842,7 @@ const covidData = [
   {
     date: '01/06/2020',
     dailyCases: '43',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '7.49309846',
@@ -850,7 +850,7 @@ const covidData = [
   {
     date: '01/05/2020',
     dailyCases: '103',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '11.72791977',
@@ -858,7 +858,7 @@ const covidData = [
   {
     date: '01/04/2020',
     dailyCases: '306',
-    name: 'Czechia',
+    name: 'Czech Republic',
     abbr: 'CZ',
     population: '10649800',
     casesPerMile: '26.98642228',

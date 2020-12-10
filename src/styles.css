@@ -1,0 +1,37 @@
+#main {
+  text-align: center;
+}
+
+#initial-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+}
+
+#mapid {
+  height: 500px;
+  width: 50%;
+  margin: 0 auto;
+}
+
+#chart-country {
+  width: 40%;
+  margin: 0 auto;
+}
+
+svg.ct-chart-bar, svg.ct-chart-line{
+  overflow: visible;
+}
+.ct-label.ct-label.ct-horizontal.ct-end {
+position: relative;
+justify-content: flex-end;
+text-align: right;
+transform-origin: 100% 0;
+transform: translate(-100%) rotate(-45deg);
+white-space: nowrap;
+}
+
+#chart-pie {
+  max-width: 85%;
+}
