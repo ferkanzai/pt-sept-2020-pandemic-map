@@ -232,7 +232,9 @@ btnNextMonth.addEventListener('click', () => {
   const pos = dates.indexOf(actualMonth);
   chartBar.destroy();
 
-  if (pos + 1 < dates.length) {
+  if (pos >= dates.length) {
+    paintCasesPerMile(dates[dates.length - 1]);
+  } else if (pos < dates.length) {
     paintCasesPerMile(dates[pos + 1]);
   }
 });
@@ -242,7 +244,9 @@ btnPrevMonth.addEventListener('click', () => {
   const pos = dates.indexOf(actualMonth);
   chartBar.destroy();
 
-  if (pos - 1 >= 0) {
+  if (pos < 0 || !pos) {
+    paintCasesPerMile(dates[0]);
+  } else if (pos >= 0) {
     paintCasesPerMile(dates[pos - 1]);
   }
 });
