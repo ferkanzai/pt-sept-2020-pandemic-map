@@ -232,7 +232,7 @@ btnNextMonth.addEventListener('click', () => {
   const pos = dates.indexOf(actualMonth);
   chartBar.destroy();
 
-  if (pos >= dates.length) {
+  if (pos >= dates.length - 1) {
     paintCasesPerMile(dates[dates.length - 1]);
   } else if (pos < dates.length) {
     paintCasesPerMile(dates[pos + 1]);
