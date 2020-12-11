@@ -3,27 +3,27 @@
 const accessToken =
   'pk.eyJ1IjoiZmVya2FuemFpIiwiYSI6ImNraTFvZGE1azBiY24yd3Fuc3RoYjZ1N3QifQ.825dTY3GMtTjgI5M90Ujrw';
 
-const getPlaces = (places) => places.reduce((acc, current) => [...acc, current.name], []);
+const dates = Array.from(new Set(covidData.map((el) => el.date))).reverse();
+const places = Array.from(new Set(covidData.map((el) => el.name)));
 
-const getUniquePlaces = (placesArr) => new Set(placesArr);
+const dynamicColors = (arrLength) => {
+  const colorArr = [];
+  for (let i = 0; i < arrLength; i++) {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    colorArr.push(`rgb(${r}, ${g}, ${b})`);
+  }
+  return colorArr;
+};
 
-const places = Array.from(getUniquePlaces(getPlaces(covidData)));
-// console.log(places);
+const pieColors = dynamicColors(places.length);
 
-const getDates = (dates) => dates.reduce((acc, current) => [...acc, current.date], []);
-
-const getUniqueDates = (datesArr) => new Set(datesArr);
-
-const dates = Array.from(getUniqueDates(getDates(covidData))).reverse();
-
-// console.log(dates);
-
-const getCoordinates = async (locations) => {
+const getCoordinates = async (locations, type) => {
   const formattedPlaces = await locations.map(async (location) => {
-    const placesUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?types=country&access_token=${accessToken}`;
+    const placesUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?types=${type}&access_token=${accessToken}`;
 
-    const res = await fetch(placesUrl);
-    const data = await res.json();
+    const data = await fetch(placesUrl).then((res) => res.json());
 
     // console.log(data.features[0].place_name)
 
@@ -42,47 +42,107 @@ const getDataFromCountry = (country) =>
 
 const getDataFromDate = (date) => covidData.filter((el) => (el.date === date ? el : false));
 
-const chartsCountryDiv = document.querySelector('#chart-country');
+const chartsCountryDiv = document.querySelector('#section-line-chart');
+const countryNameSpan = document.querySelector('#country');
+const countryCanvas = document.createElement('canvas');
+const chartLineTitle = document.querySelector('#line-chart-title');
+const map = document.querySelector('#mapid');
+const removeChartBtn = document.querySelector('#remove-chart');
+let chartLine;
 
-const showCountryGraph = (countryName) => {
-  chartsCountryDiv.innerHTML = '';
+const showCountryGraph = (countryName, destinationDiv) => {
+  if (chartLine) {
+    chartLine.destroy();
+  }
 
-  const datesForDailyCases = getDataFromCountry(countryName).map((el) => el.date);
-  const dailyCases = getDataFromCountry(countryName).map((el) => el.dailyCases);
+  removeChartBtn.classList.add('visible');
+  map.classList.add('map-after');
 
-  const countryData = {
-    labels: datesForDailyCases.reverse(),
-    series: [dailyCases.reverse()],
-  };
+  countryCanvas.innerHTML = '';
 
-  const countryChart = document.createElement('div');
-  const chartLineTitle = document.createElement('h2');
-  chartLineTitle.innerText = `Daily cases in ${countryName.split('_').join(' ')}`;
-  countryChart.classList.add(`${countryName}-chart`);
-  countryChart.classList.add(`ct-golden-section`);
-  chartsCountryDiv.appendChild(chartLineTitle);
-  chartsCountryDiv.appendChild(countryChart);
+  const labels = getDataFromCountry(countryName)
+    .map((el) => el.date)
+    .reverse();
+  const series = getDataFromCountry(countryName)
+    .map((el) => el.dailyCases)
+    .reverse();
 
-  new Chartist.Line(countryChart, countryData);
+  const ctxLine = countryCanvas.getContext('2d');
+
+  chartLine = new Chart(ctxLine, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+      labels,
+      datasets: [
+        {
+          label: `Daily cases in ${countryName.split('_').join(' ')}`,
+          borderColor: 'blue',
+          backgroundColor: 'transparent',
+          data: series,
+        },
+      ],
+    },
+
+    // Configuration options go here
+    options: {
+      aspectRatio: 1.3,
+    },
+  });
+
+  // const countryChart = document.createElement('div');
+  countryNameSpan.innerText = `${countryName.split('_').join(' ')}`;
+  chartLineTitle.classList.add('visible');
+  // countryChart.classList.add(`${countryName}-chart`);
+  // countryChart.appendChild(countryCanvas);
+  destinationDiv.appendChild(countryCanvas);
 };
 
 // const chartsDiv = document.querySelector('#charts');
 const chartBarH2 = document.querySelector('#chart-bar');
+let chartBar;
+const canvasBar = document.createElement('canvas');
+const ctxBar = canvasBar.getContext('2d');
 
 const paintCasesPerMile = (date) => {
+  if (chartBar) {
+    chartBar.destroy();
+  }
+
   const dateSpan = document.querySelector('#date');
   dateSpan.innerHTML = date;
 
   const countriesName = getDataFromDate(date).map((el) => el.name);
   const casePerMileData = getDataFromDate(date).map((el) => el.casesPerMile);
 
-  const casesPerMileChartData = {
-    labels: countriesName,
-    series: [casePerMileData],
-  };
+  chartBar = new Chart(ctxBar, {
+    // The type of chart we want to create
+    type: 'bar',
 
-  new Chartist.Bar(chartBarH2, casesPerMileChartData);
+    // The data for our dataset
+    data: {
+      labels: countriesName.map((el) => el.split('_').join(' ')),
+      datasets: [
+        {
+          label: 'Cases per 1000 habitants',
+          backgroundColor: 'rgb(51, 204, 51)',
+          borderColor: 'rgb(51, 204, 51)',
+          data: casePerMileData,
+        },
+      ],
+    },
+
+    // Configuration options go here
+    options: {
+      aspectRatio: 3,
+    },
+  });
 };
+
+const sectionBarChart = document.querySelector('#section-bar-chart');
+sectionBarChart.appendChild(canvasBar);
 
 const chartPieH2 = document.querySelector('#chart-pie');
 
@@ -96,27 +156,44 @@ const paintTotalCases = () => {
     };
   });
 
-  const totalCasesData = {
-    labels: totalCasesPerCountry.map((el) => el.name),
-    series: totalCasesPerCountry.map((el) => el.total),
-  };
+  // const colors = dynamicColors(totalCasesPerCountry.length);
+  // console.log(colors)
+  // console.log(totalCasesPerCountry.map(el => el.total));
 
-  const pieOptions = {
-    donut: true,
-    donutWidth: 150,
-  };
+  const canvasPie = document.createElement('canvas');
+  const ctxPie = canvasPie.getContext('2d');
 
-  const pieChart = document.createElement('div');
-  pieChart.classList.add(`ct-golden-section`);
-  chartPieH2.appendChild(pieChart);
+  const chartPie = new Chart(ctxPie, {
+    // The type of chart we want to create
+    type: 'doughnut',
 
-  new Chartist.Pie(pieChart, totalCasesData, pieOptions);
+    // The data for our dataset
+    data: {
+      labels: totalCasesPerCountry.map((el) => el.name.split('_').join(' ')),
+      datasets: [
+        {
+          data: totalCasesPerCountry.map((el) => el.total),
+          backgroundColor: pieColors,
+        },
+      ],
+    },
+
+    // Configuration options go here
+    options: {
+      legend: {
+        display: true,
+      },
+    },
+  });
+
+  const sectionPieChart = document.querySelector('#section-pie-chart');
+  sectionPieChart.appendChild(canvasPie);
 };
 
 const start = async () => {
-  const locations = await getCoordinates(places);
+  const locations = await getCoordinates(places, 'country');
   // console.log(locations)
-  const myMap = L.map('mapid').setView([53, 9], 3);
+  const myMap = L.map('mapid').setView([56.02, 59.45], 3);
 
   L.tileLayer(
     'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
@@ -138,7 +215,7 @@ const start = async () => {
     L.marker(countryCoordinates)
       .bindPopup(`<b>${name.split('_').join(' ')}</b>`)
       .addTo(myMap)
-      .on('click', () => showCountryGraph(name));
+      .on('click', () => showCountryGraph(name, chartsCountryDiv));
   });
 
   paintCasesPerMile(dates[dates.length - 1]);
@@ -153,6 +230,7 @@ const btnPrevMonth = document.querySelector('#btn-prev-month');
 btnNextMonth.addEventListener('click', () => {
   const actualMonth = document.querySelector('#date').innerHTML;
   const pos = dates.indexOf(actualMonth);
+  chartBar.destroy();
 
   if (pos + 1 < dates.length) {
     paintCasesPerMile(dates[pos + 1]);
@@ -162,8 +240,19 @@ btnNextMonth.addEventListener('click', () => {
 btnPrevMonth.addEventListener('click', () => {
   const actualMonth = document.querySelector('#date').innerHTML;
   const pos = dates.indexOf(actualMonth);
+  chartBar.destroy();
 
   if (pos - 1 >= 0) {
     paintCasesPerMile(dates[pos - 1]);
+  }
+});
+
+removeChartBtn.addEventListener('click', () => {
+  if (chartLine) {
+    chartLine.clear();
+    chartLine.destroy();
+    removeChartBtn.classList.remove('visible');
+    chartLineTitle.classList.remove('visible');
+    map.classList.remove('map-after');
   }
 });

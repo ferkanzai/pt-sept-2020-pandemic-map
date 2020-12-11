@@ -1,5 +1,6 @@
 #main {
   text-align: center;
+  overflow-anchor: none;
 }
 
 #initial-section {
@@ -11,13 +12,28 @@
 
 #mapid {
   height: 500px;
-  width: 50%;
   margin: 0 auto;
 }
 
-#chart-country {
+.map-initial {
+  width: 85%;
+}
+
+.map-after {
+  width: 50%;
+}
+
+#section-line-chart {
   width: 40%;
   margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: inline;
 }
 
 svg.ct-chart-bar, svg.ct-chart-line{

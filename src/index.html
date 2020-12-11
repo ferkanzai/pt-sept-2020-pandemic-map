@@ -16,16 +16,22 @@
   <body>
     <div id="main">
       <div id="initial-section">
-        <div id="mapid"></div>
-        <div id="chart-country"></div>
+        <div id="mapid" class="map-initial"></div>
+        <div id="section-line-chart">
+          <h2 id="line-chart-title" class="hidden">Daily cases in <span id="country"></span></h2>
+          <button id="remove-chart" class="hidden">Remove chart</button>
+        </div>
       </div>
       <div id="charts">
         <div id="section-bar-chart">
-          <h2 id="chart-bar">Cases per 1000 habitants on <span id="date"></span></h2>
+          <h2 id="bar-chart-title">Cases per 1000 habitants on <span id="date"></span></h2>
           <button id="btn-prev-month">Previous month</button>
           <button id="btn-next-month">Next month</button>
+          <!-- <button id="use-chart-js">Change graph to Chart.js</button> -->
         </div>
-        <h2 id="chart-pie">Total cases per country</h2>
+        <div id="section-pie-chart">
+          <h2 id="pie-chart-title">Total cases per country</h2>
+        </div>
       </div>
     </div>
     <script
