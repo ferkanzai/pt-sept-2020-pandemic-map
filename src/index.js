@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 // Empieza aquí ⬇️
 
-import covidData from './covidData';
-
 const accessToken =
   'pk.eyJ1IjoiZmVya2FuemFpIiwiYSI6ImNraTFvZGE1azBiY24yd3Fuc3RoYjZ1N3QifQ.825dTY3GMtTjgI5M90Ujrw';
 

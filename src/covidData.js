@@ -3962,4 +3962,3 @@ const covidData = [
 ];
 
 console.log(covidData);
-export default 'covidData';
