@@ -1,4 +1,7 @@
+/* eslint-disable no-undef */
 // Empieza aquí ⬇️
+
+import covidData from './covidData';
 
 const accessToken =
   'pk.eyJ1IjoiZmVya2FuemFpIiwiYSI6ImNraTFvZGE1azBiY24yd3Fuc3RoYjZ1N3QifQ.825dTY3GMtTjgI5M90Ujrw';
@@ -8,7 +11,7 @@ const places = Array.from(new Set(covidData.map((el) => el.name)));
 
 const dynamicColors = (arrLength) => {
   const colorArr = [];
-  for (let i = 0; i < arrLength; i++) {
+  for (let i = 0; i < arrLength; i += 1) {
     const r = Math.floor(Math.random() * 255);
     const g = Math.floor(Math.random() * 255);
     const b = Math.floor(Math.random() * 255);
@@ -101,7 +104,7 @@ const showCountryGraph = (countryName, destinationDiv) => {
 };
 
 // const chartsDiv = document.querySelector('#charts');
-const chartBarH2 = document.querySelector('#chart-bar');
+// const chartBarH2 = document.querySelector('#chart-bar');
 let chartBar;
 const canvasBar = document.createElement('canvas');
 const ctxBar = canvasBar.getContext('2d');
@@ -114,8 +117,12 @@ const paintCasesPerMile = (date) => {
   const dateSpan = document.querySelector('#date');
   dateSpan.innerHTML = date;
 
-  const countriesName = getDataFromDate(date).map((el) => el.name);
-  const casePerMileData = getDataFromDate(date).map((el) => el.casesPerMile);
+  const allData = getDataFromDate(date).sort((a, b) =>
+    +a.casesPerMile > +b.casesPerMile ? 1 : -1
+  );
+
+  const countriesName = allData.map((el) => el.name);
+  const casePerMileData = allData.map((el) => el.casesPerMile);
 
   chartBar = new Chart(ctxBar, {
     // The type of chart we want to create
@@ -144,7 +151,7 @@ const paintCasesPerMile = (date) => {
 const sectionBarChart = document.querySelector('#section-bar-chart');
 sectionBarChart.appendChild(canvasBar);
 
-const chartPieH2 = document.querySelector('#chart-pie');
+// const chartPieH2 = document.querySelector('#chart-pie');
 
 const paintTotalCases = () => {
   const totalCasesPerCountry = places.map((el) => {
@@ -163,6 +170,7 @@ const paintTotalCases = () => {
   const canvasPie = document.createElement('canvas');
   const ctxPie = canvasPie.getContext('2d');
 
+  // eslint-disable-next-line no-unused-vars
   const chartPie = new Chart(ctxPie, {
     // The type of chart we want to create
     type: 'doughnut',
@@ -210,7 +218,7 @@ const start = async () => {
 
   locations.forEach((location) => {
     const countryCoordinates = [location.lat, location.long];
-    const name = location.name;
+    const { name } = location;
 
     L.marker(countryCoordinates)
       .bindPopup(`<b>${name.split('_').join(' ')}</b>`)
@@ -232,7 +240,7 @@ btnNextMonth.addEventListener('click', () => {
   const pos = dates.indexOf(actualMonth);
   chartBar.destroy();
 
-  if (pos >= dates.length) {
+  if (pos >= dates.length - 1) {
     paintCasesPerMile(dates[dates.length - 1]);
   } else if (pos < dates.length) {
     paintCasesPerMile(dates[pos + 1]);
